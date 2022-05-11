@@ -6,9 +6,32 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    _instanceof:
+        App\Shared\Application\Command\CommandHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.command }
+        App\Shared\Application\Query\QueryHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.query }
+
     App\:
         resource: '../src/App/*'
         exclude: '../src/App/**/{Migrations}'
 
+    UI\:
+        resource: '../src/UI/*'
+        exclude: '../src/UI/**/{EventSubscriber}'
+
+    App\Shared\Infrastructure\Bus\Command\MessengerCommandBus:
+        arguments:
+            - '@messenger.bus.command'
+
+    App\Shared\Infrastructure\Bus\Query\MessengerQueryBus:
+        arguments:
+            - '@messenger.bus.query'
+
+    # UI
     UI\Cli\Command\:
         resource: '../src/UI/Cli/Command'

@@ -6,10 +6,8 @@ declare(strict_types=1);
 namespace UI\Cli\Command;
 
 
-use App\User\Application\Command\SignUp\SignUpHandler as CreateUserHandler;
+use App\Shared\Application\Command\CommandBusInterface;
 use App\User\Application\Command\SignUp\SignUpCommand as CreateUser;
-use App\User\Domain\Repository\UserRepositoryInterface;
-use App\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use Assert\AssertionFailedException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
@@ -20,17 +18,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateUserCommand extends Command
 {
-    private UserRepositoryInterface $userRepository;
-    private UniqueEmailSpecificationInterface $uniqueEmailSpecification;
+    private CommandBusInterface $commandBus;
 
-    public function __construct(
-        UserRepositoryInterface $userRepository,
-        UniqueEmailSpecificationInterface $uniqueEmailSpecification
-    ) {
+    public function __construct(CommandBusInterface $commandBus) {
         parent::__construct();
-
-        $this->userRepository = $userRepository;
-        $this->uniqueEmailSpecification = $uniqueEmailSpecification;
+        $this->commandBus = $commandBus;
     }
 
     protected function configure()
@@ -54,16 +46,7 @@ class CreateUserCommand extends Command
         /** @var string $password */
         $password = $input->getArgument('password');
 
-        $createUserHandler = new CreateUserHandler(
-            $this->userRepository,
-            $this->uniqueEmailSpecification
-        );
-
-        $createUserHandler(new CreateUser(
-            $uuid,
-            $email,
-            $password
-        ));
+        $this->commandBus->handle(new CreateUser($uuid, $email, $password));
 
         $output->writeln('<info>User Created: </info>');
         $output->writeln('');
