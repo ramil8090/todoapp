@@ -26,6 +26,7 @@ framework:
 
         routing:
 #            'App\Shared\Application\Command\CommandInterface': sync
+            'App\Shared\Domain\Event\DomainEvent': events
 
 # when@test:
 #    framework:

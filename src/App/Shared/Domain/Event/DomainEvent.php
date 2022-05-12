@@ -8,5 +8,7 @@ namespace App\Shared\Domain\Event;
 
 interface DomainEvent
 {
+    public function serialize(): array;
 
+    public static function deserialize(array $data): self;
 }

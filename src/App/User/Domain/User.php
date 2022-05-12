@@ -6,7 +6,10 @@ declare(strict_types=1);
 namespace App\User\Domain;
 
 
+use App\Shared\Domain\AggregateRoot;
+use App\Shared\Domain\Exception\DateTimeException;
 use App\Shared\Domain\ValueObject\DateTime;
+use App\User\Domain\Event\UserWasCreated;
 use App\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use App\User\Domain\ValueObject\Auth\Credentials;
 use App\User\Domain\ValueObject\Auth\HashedPassword;
@@ -19,7 +22,7 @@ use Ramsey\Uuid\UuidInterface;
  * @ORM\Entity()
  * @ORM\Table(name="users")
  */
-final class User
+final class User extends AggregateRoot
 {
     /**
      * @ORM\Id()
@@ -42,6 +45,9 @@ final class User
      */
     private ?DateTimeImmutable $updatedAt;
 
+    /**
+     * @throws DateTimeException
+     */
     public static function create(
         UuidInterface $uuid,
         Credentials $credentials,
@@ -54,7 +60,9 @@ final class User
 
         $user->uuid = $uuid;
         $user->credentials = $credentials;
-        $user->createdAt = new DateTimeImmutable();
+        $user->createdAt = DateTime::now();
+
+        $user->apply(new UserWasCreated($uuid, $credentials, DateTime::now()));
 
         return $user;
     }
