@@ -18,5 +18,10 @@ services:
     ports:
       - "3306:3306"
 
+  rmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
 volumes:
   db_data:

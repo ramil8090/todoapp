@@ -31,6 +31,24 @@ services:
       - /app/var/sessions/
     depends_on:
       - mysql
+      - rmq
+
+  workers_events:
+    build:
+      dockerfile: docker/artifact/Dockerfile
+      context: .
+      target: php-dev
+    volumes:
+      - ./:/app:rw,delegated
+      # If you develop on Linux, comment out the following volumes to just use bind-mounted project directory from host
+      - /app/var/
+      - /app/var/cache/
+      - /app/var/logs/
+      - /app/var/sessions/
+    command: [ '/app/bin/console', 'messenger:consume', 'events', '-vv' ]
+    depends_on:
+      - mysql
+      - rmq
 
   mysql:
     image: mysql:8.0
@@ -44,11 +62,20 @@ services:
       - MYSQL_ROOT_PASSWORD=api
       - MYSQL_DATABASE=api
 
+  rmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+
   start_dependencies:
     image: dadarek/wait-for-dependencies
     depends_on:
       - mysql
-    command: mysql:3306
+      - rmq
+    command: mysql:3306 rmq:5672
 
 volumes:
   db-data:
