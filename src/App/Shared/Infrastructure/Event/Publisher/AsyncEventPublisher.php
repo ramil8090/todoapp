@@ -6,13 +6,14 @@ namespace App\Shared\Infrastructure\Event\Publisher;
 
 use App\Shared\Domain\Event\DomainEvent;
 use App\Shared\Infrastructure\Bus\AsyncEvent\MessengerAsyncEventBus;
+use Assert\Assertion;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 use Throwable;
 
-final class AsyncEventPublisher implements EventSubscriberInterface
+final class AsyncEventPublisher implements EventSubscriberInterface, EventPublisherInterface
 {
     /** @var DomainEvent[] */
     private array $events = [];
@@ -29,10 +30,13 @@ final class AsyncEventPublisher implements EventSubscriberInterface
      */
     public function recordEvents(array $events): void
     {
+        Assertion::allIsInstanceOf(
+            $events,
+            DomainEvent::class,
+            "Events should implement DomainEvent interface"
+        );
+
         foreach ($events as $event) {
-            if (!$event instanceof DomainEvent) {
-                throw new \InvalidArgumentException("Events should implement DomainEvent interface");
-            }
             $this->events[] = $event;
         }
     }

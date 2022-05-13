@@ -36,7 +36,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
      */
     public function get(UuidInterface $uuid): User
     {
-        $user = $this->findOneBy(['uuid' => $uuid->getBytes()]);
+        $user = $this->findOneBy(['uuid' => $uuid]);
 
         if (!$user) {
             throw new NotFoundException();

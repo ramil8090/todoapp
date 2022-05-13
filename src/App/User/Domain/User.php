@@ -9,7 +9,9 @@ namespace App\User\Domain;
 use App\Shared\Domain\AggregateRoot;
 use App\Shared\Domain\Exception\DateTimeException;
 use App\Shared\Domain\ValueObject\DateTime;
+use App\User\Domain\Event\UserSignedIn;
 use App\User\Domain\Event\UserWasCreated;
+use App\User\Domain\Exception\InvalidCredentialsException;
 use App\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use App\User\Domain\ValueObject\Auth\Credentials;
 use App\User\Domain\ValueObject\Auth\HashedPassword;
@@ -75,6 +77,15 @@ final class User extends AggregateRoot
         $uniqueEmailSpecification->isUnique($email);
 
         $this->credentials->email = $email;
+    }
+
+    public function signIn(string $plainPassword): void
+    {
+        if (!$this->credentials->hashedPassword->match($plainPassword)) {
+            throw new InvalidCredentialsException();
+        }
+
+        $this->apply(new UserSignedIn($this->uuid, $this->credentials->email));
     }
 
     /**

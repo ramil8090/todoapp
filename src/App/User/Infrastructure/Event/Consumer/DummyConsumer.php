@@ -13,6 +13,6 @@ class DummyConsumer implements AsyncEventHandlerInterface
 {
     public function __invoke(UserWasCreated $event)
     {
-        echo json_encode($event->serialize());
+        echo "User was created: " . json_encode($event->serialize());
     }
 }
