@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace App\User\Infrastructure\Auth;
 
 
-use App\Shared\Infrastructure\Exception\NotFoundException;
+use App\Shared\Infrastructure\Persistence\Exception\NotFoundException;
 use App\User\Domain\Repository\GetUserCredentialsByEmailInterface;
 use App\User\Domain\ValueObject\Email;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;

@@ -8,7 +8,7 @@ namespace App\User\Application\Query\FindByEmail;
 
 use App\Shared\Application\Query\Item;
 use App\Shared\Application\Query\QueryHandlerInterface;
-use App\Shared\Infrastructure\Exception\NotFoundException;
+use App\Shared\Infrastructure\Persistence\Exception\NotFoundException;
 use App\User\Infrastructure\Repository\UserQueryRepository;
 use Doctrine\ORM\NonUniqueResultException;
 

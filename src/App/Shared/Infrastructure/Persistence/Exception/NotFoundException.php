@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace App\Shared\Infrastructure\Exception;
+namespace App\Shared\Infrastructure\Persistence\Exception;
 
 
 final class NotFoundException extends \Exception

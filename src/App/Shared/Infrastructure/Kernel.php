@@ -47,11 +47,11 @@ class Kernel extends BaseKernel
     {
         $confDir = $this->getConfigDir();
         if (\is_dir($confDir . '/routes/')) {
-            $routes->import($confDir . '/routes/*' . self::CONFIG_EXITS, '/', 'glob');
+            $routes->import($confDir . '/routes/*' . self::CONFIG_EXITS, 'glob');
         }
         if (\is_dir($confDir . '/routes/' . $this->environment)) {
             $routes->import($confDir . '/routes/' . $this->environment . '/**/*' . self::CONFIG_EXITS, '/', 'glob');
         }
-        $routes->import($confDir . '/routes' . self::CONFIG_EXITS, '/', 'glob');
+        $routes->import($confDir . '/routes' . self::CONFIG_EXITS, 'glob');
     }
 }

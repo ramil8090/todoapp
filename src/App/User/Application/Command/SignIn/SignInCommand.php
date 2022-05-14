@@ -16,12 +16,13 @@ class SignInCommand implements CommandInterface
     public string $plainPassword;
 
     /**
-     * @param Email $email
+     * @param string $email
      * @param string $plainPassword
+     * @throws \Assert\AssertionFailedException
      */
-    public function __construct(Email $email, string $plainPassword)
+    public function __construct(string $email, string $plainPassword)
     {
-        $this->email = $email;
+        $this->email = Email::fromString($email);
         $this->plainPassword = $plainPassword;
     }
 

@@ -1,4 +1,10 @@
 parameters:
+    exception_to_status:
+        InvalidArgumentException: 400
+        App\User\Domain\Exception\InvalidCredentialsException: 401
+        App\User\Domain\Exception\ForbiddenException: 403
+        App\Shared\Infrastructure\Persistence\ReadModel\Exception\NotFoundException: 404
+        Broadway\Repository\AggregateNotFoundException: 404
 
 services:
     # default configuration for services in *this* file
@@ -43,3 +49,20 @@ services:
     # UI
     UI\Cli\Command\:
         resource: '../src/UI/Cli/Command'
+
+    UI\Http\Rest\Controller\:
+        resource: '../src/UI/Http/Rest/Controller/*'
+        tags: [ 'controller.service_arguments' ]
+
+    ### UI Listeners
+
+    UI\Http\Rest\EventSubscriber\ExceptionSubscriber:
+        arguments:
+            - "%kernel.environment%"
+            - "%exception_to_status%"
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.exception' }
+
+    UI\Http\Rest\EventSubscriber\JsonBodyParserSubscriber:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest', priority: 100 }
