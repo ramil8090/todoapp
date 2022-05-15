@@ -29,6 +29,6 @@ class FindByEmailHandler implements QueryHandlerInterface
     {
         $userData = $this->userQueryRepository->oneByEmailAsArray($query->email);
 
-        return Item::fromPayload($userData['uuid']->toString(), 'UserView', $userData);
+        return Item::fromPayload($userData['uuid']->toString(), 'User', $userData);
     }
 }

@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Controller\CommandController;
 use UI\Http\Session;
+use OpenApi\Annotations as OA;
 
 class UserChangeEmailController extends CommandController
 {
@@ -24,6 +25,7 @@ class UserChangeEmailController extends CommandController
 
     /**
      * @param Session $session
+     * @param CommandBusInterface $commandBus
      */
     public function __construct(Session $session, CommandBusInterface $commandBus)
     {
@@ -37,12 +39,38 @@ class UserChangeEmailController extends CommandController
      *     name="user_change_email",
      *     methods={"POST"}
      * )
-     * @param string $uuid
-     * @param Request $request
-     * @return JsonResponse
+     *
+     * @OA\Response(
+     *     response=201,
+     *     description="Email changed"
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad request"
+     * )
+     * @OA\Response(
+     *     response=409,
+     *     description="Conflict"
+     * )
+     *
+     * @OA\RequestBody(
+     *     @OA\JsonContent(
+     *         type="object",
+     *         @OA\Property(property="email", type="string"),
+     *     )
+     * )
+     *
+     * @OA\Parameter(
+     *     name="uuid",
+     *     in="path",
+     *     @OA\Schema(type="string")
+     * )
+     *
+     * @OA\Tag(name="User")
+     *
      * @throws AssertionFailedException
      */
-    public function __invoke(string $uuid, Request $request)
+    public function __invoke(string $uuid, Request $request): JsonResponse
     {
         $this->validateUuid($uuid);
 
