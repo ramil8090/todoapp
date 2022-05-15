@@ -10,7 +10,6 @@ use App\Shared\Application\Query\Item;
 use App\User\Application\Query\FindByEmail\FindByEmailQuery;
 use Assert\Assertion;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Controller\QueryController;
 
@@ -22,7 +21,7 @@ class GetUserByEmailController extends QueryController
      *     name="find_user",
      *     methods={"GET"}
      * )
-     * @Security("is_granted('ROLE_USER')")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @param string $email
      * @return \UI\Http\Rest\Response\OpenApi
