@@ -9,6 +9,7 @@ namespace App\User\Domain;
 use App\Shared\Domain\AggregateRoot;
 use App\Shared\Domain\Exception\DateTimeException;
 use App\Shared\Domain\ValueObject\DateTime;
+use App\User\Domain\Event\UserEmailChanged;
 use App\User\Domain\Event\UserSignedIn;
 use App\User\Domain\Event\UserWasCreated;
 use App\User\Domain\Exception\InvalidCredentialsException;
@@ -69,14 +70,17 @@ final class User extends AggregateRoot
         return $user;
     }
 
-    public function changeEmail(
-        Email $email,
-        UniqueEmailSpecificationInterface $uniqueEmailSpecification
-    ): void
+    /**
+     * @throws DateTimeException
+     */
+    public function changeEmail(Email $email, UniqueEmailSpecificationInterface $uniqueEmailSpecification): void
     {
         $uniqueEmailSpecification->isUnique($email);
 
-        $this->credentials->email = $email;
+        $this->setEmail($email);
+        $this->setUpdatedAt(DateTime::now());
+
+        $this->apply(new UserEmailChanged($this->uuid, $email, DateTime::now()));
     }
 
     public function signIn(string $plainPassword): void
