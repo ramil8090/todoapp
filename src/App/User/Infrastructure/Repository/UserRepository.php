@@ -28,7 +28,6 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     public function store(User $user): void
     {
         $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
     }
 
     /**

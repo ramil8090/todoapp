@@ -7,7 +7,10 @@ framework:
             messenger.bus.command:
                 default_middleware: false
                 middleware:
-                  - handle_message
+                    - doctrine_ping_connection
+                    - doctrine_close_connection
+                    - doctrine_transaction
+                    - handle_message
             messenger.bus.query:
               default_middleware: false
               middleware:

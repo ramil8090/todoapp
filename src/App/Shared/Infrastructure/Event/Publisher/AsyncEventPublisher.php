@@ -44,6 +44,7 @@ final class AsyncEventPublisher implements EventSubscriberInterface, EventPublis
     public static function getSubscribedEvents(): array
     {
         return [
+            KernelEvents::EXCEPTION => ['clearEvents', 100],
             KernelEvents::TERMINATE => 'publish',
             ConsoleEvents::TERMINATE => 'publish',
         ];
@@ -61,5 +62,10 @@ final class AsyncEventPublisher implements EventSubscriberInterface, EventPublis
         foreach ($this->events as $event) {
             $this->bus->handle($event);
         }
+    }
+
+    public function clearEvents(): void
+    {
+        $this->events = [];
     }
 }
