@@ -9,6 +9,7 @@ doctrine:
             datetime_immutable: App\Shared\Infrastructure\Persistence\Doctrine\Types\DateTimeType
             email: App\Shared\Infrastructure\Persistence\Doctrine\Types\EmailType
             hashed_password: App\Shared\Infrastructure\Persistence\Doctrine\Types\HashedPasswordType
+            todolist_title: App\TodoList\Infrastructure\Persistence\Doctrine\Types\TodoListTitleType
         mapping_types:
             uuid_binary: binary
     orm:
@@ -22,3 +23,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/App/User/Domain'
                 prefix: 'App\User'
                 alias: AppUser
+            TodoList:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/App/TodoList/Domain'
+                prefix: 'App\TodoList'
+                alias: AppTodoList
