@@ -14,19 +14,10 @@ use App\User\Domain\ValueObject\Email;
 use Assert\AssertionFailedException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use Tests\App\User\Domain\Specification\DummyUniqueEmailSpecification;
 
-class UserTest extends TestCase implements UniqueEmailSpecificationInterface
+class UserTest extends TestCase
 {
-    private bool $isUniqueException = false;
-
-    public function isUnique(Email $email): bool
-    {
-        if ($this->isUniqueException) {
-            throw new EmailAlreadyExistException();
-        }
-
-        return true;
-    }
 
     /**
      * @test
@@ -43,7 +34,7 @@ class UserTest extends TestCase implements UniqueEmailSpecificationInterface
                 Email::fromString($emailValue),
                 HashedPassword::encode('password')
             ),
-            $this
+            new DummyUniqueEmailSpecification()
         );
 
         self::assertSame($emailValue, $user->email());
@@ -60,6 +51,7 @@ class UserTest extends TestCase implements UniqueEmailSpecificationInterface
     public function given_new_email_it_should_change_if_not_eq_to_prev(): void
     {
         $emailValue = 'some@email.loc';
+        $uniqueEmailSpecification = new DummyUniqueEmailSpecification();
 
         $user = User::create(
             Uuid::uuid4(),
@@ -67,12 +59,12 @@ class UserTest extends TestCase implements UniqueEmailSpecificationInterface
                 Email::fromString($emailValue),
                 HashedPassword::encode('password')
             ),
-            $this
+            $uniqueEmailSpecification
         );
 
         $newEmailValue = 'new@email.loc';
 
-        $user->changeEmail(Email::fromString($newEmailValue), $this);
+        $user->changeEmail(Email::fromString($newEmailValue), $uniqueEmailSpecification);
 
         self::assertSame($newEmailValue, $user->email(), 'Emails should be equals');
     }
@@ -88,8 +80,6 @@ class UserTest extends TestCase implements UniqueEmailSpecificationInterface
     {
         self::expectException(EmailAlreadyExistException::class);
 
-        $this->isUniqueException = true;
-
         $emailValue = 'some@email.loc';
 
         User::create(
@@ -98,7 +88,7 @@ class UserTest extends TestCase implements UniqueEmailSpecificationInterface
                 Email::fromString($emailValue),
                 HashedPassword::encode('password')
             ),
-            $this
+            new DummyUniqueEmailSpecification(true)
         );
     }
 }
