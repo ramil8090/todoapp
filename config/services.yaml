@@ -1,4 +1,6 @@
 parameters:
+    env(DATABASE_URL): 'mysql://root:api@mysql:3306/api?serverVersion=8.0'
+
     exception_to_status:
         InvalidArgumentException: 400
         App\User\Domain\Exception\InvalidCredentialsException: 401

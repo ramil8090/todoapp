@@ -22,7 +22,7 @@ final class AuthProvider implements UserProviderInterface
         $this->userStore = $userStore;
     }
 
-    public function refreshUser(UserInterface $user)
+    public function refreshUser(UserInterface $user): UserInterface|Auth
     {
         [$uuid, $email, $hashedPassword] = $this->userStore->getCredentialsByEmail(
             Email::fromString($user->getUserIdentifier())
@@ -31,7 +31,7 @@ final class AuthProvider implements UserProviderInterface
         return Auth::create($uuid, $email, $hashedPassword);
     }
 
-    public function supportsClass(string $class)
+    public function supportsClass(string $class): bool
     {
         return Auth::class === $class;
     }

@@ -37,7 +37,7 @@ class CreateUserCommand extends Command
     /**
      * @throws AssertionFailedException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $uuid */
         $uuid = $input->getArgument('uuid') ?? Uuid::uuid4()->toString();

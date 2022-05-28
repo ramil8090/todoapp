@@ -68,4 +68,9 @@ final class AsyncEventPublisher implements EventSubscriberInterface, EventPublis
     {
         $this->events = [];
     }
+
+    public function events(): array
+    {
+        return $this->events;
+    }
 }

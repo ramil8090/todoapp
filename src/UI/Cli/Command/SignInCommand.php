@@ -30,7 +30,7 @@ class SignInCommand extends Command
             ->addArgument('password', InputArgument::REQUIRED, 'User password');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $email */
         $email = $input->getArgument('email');
