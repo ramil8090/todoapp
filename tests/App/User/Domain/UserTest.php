@@ -6,8 +6,10 @@ declare(strict_types=1);
 namespace App\User\Domain;
 
 
+use App\Shared\Domain\Exception\DateTimeException;
+use App\User\Domain\Event\UserEmailChanged;
+use App\User\Domain\Event\UserWasCreated;
 use App\User\Domain\Exception\EmailAlreadyExistException;
-use App\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use App\User\Domain\ValueObject\Auth\Credentials;
 use App\User\Domain\ValueObject\Auth\HashedPassword;
 use App\User\Domain\ValueObject\Email;
@@ -39,6 +41,10 @@ class UserTest extends TestCase
 
         self::assertSame($emailValue, $user->email());
         self::assertNotEmpty($user->uuid());
+
+        $events = $user->releaseEvents();
+        self::assertCount(1, $events);
+        self::assertInstanceOf(UserWasCreated::class, $events[0]);
     }
 
     /**
@@ -47,6 +53,7 @@ class UserTest extends TestCase
      * @group unit
      *
      * @throws AssertionFailedException
+     * @throws DateTimeException
      */
     public function given_new_email_it_should_change_if_not_eq_to_prev(): void
     {
@@ -67,6 +74,10 @@ class UserTest extends TestCase
         $user->changeEmail(Email::fromString($newEmailValue), $uniqueEmailSpecification);
 
         self::assertSame($newEmailValue, $user->email(), 'Emails should be equals');
+
+        $events = $user->releaseEvents();
+        self::assertCount(2, $events);
+        self::assertInstanceOf(UserEmailChanged::class, $events[1]);
     }
 
     /**
@@ -75,6 +86,7 @@ class UserTest extends TestCase
      * @group unit
      *
      * @throws AssertionFailedException
+     * @throws DateTimeException
      */
     public function given_a_registered_email_should_throw_an_exception(): void
     {
