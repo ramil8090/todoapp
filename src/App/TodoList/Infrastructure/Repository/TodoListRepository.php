@@ -11,7 +11,7 @@ use App\TodoList\Domain\Repository\TodoListRepositoryInterface;
 use App\TodoList\Domain\TodoList;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class TodoListRepository extends ServiceEntityRepository implements TodoListRepositoryInterface
 {
@@ -23,7 +23,7 @@ class TodoListRepository extends ServiceEntityRepository implements TodoListRepo
     /**
      * @throws NotFoundException
      */
-    public function get(Uuid $uuid): TodoList
+    public function get(UuidInterface $uuid): TodoList
     {
         $todoList = $this->findOneBy(['uuid' => $uuid]);
 
