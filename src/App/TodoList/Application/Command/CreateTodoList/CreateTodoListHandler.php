@@ -12,7 +12,7 @@ use App\TodoList\Domain\Repository\TodoListRepositoryInterface;
 use App\TodoList\Domain\Specification\OwnerExistSpecification;
 use App\TodoList\Domain\TodoList;
 
-class CreateTodoListHandle implements CommandHandlerInterface
+class CreateTodoListHandler implements CommandHandlerInterface
 {
     private TodoListRepositoryInterface $todoListRepository;
 
