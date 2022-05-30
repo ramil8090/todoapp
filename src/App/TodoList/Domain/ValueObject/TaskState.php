@@ -63,4 +63,9 @@ class TaskState
     {
         return (string) $this->state;
     }
+
+    public function getValue(): int
+    {
+        return $this->state;
+    }
 }

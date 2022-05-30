@@ -10,6 +10,9 @@ doctrine:
             email: App\Shared\Infrastructure\Persistence\Doctrine\Types\EmailType
             hashed_password: App\Shared\Infrastructure\Persistence\Doctrine\Types\HashedPasswordType
             todolist_title: App\TodoList\Infrastructure\Persistence\Doctrine\Types\TodoListTitleType
+            task_title: App\TodoList\Infrastructure\Persistence\Doctrine\Types\TaskTitleType
+            task_description: App\TodoList\Infrastructure\Persistence\Doctrine\Types\TaskDescriptionType
+            task_state: App\TodoList\Infrastructure\Persistence\Doctrine\Types\TaskStateType
         mapping_types:
             uuid_binary: binary
     orm:

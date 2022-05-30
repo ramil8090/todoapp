@@ -15,22 +15,49 @@ use App\TodoList\Domain\Specification\TodoListExistSpecification;
 use App\TodoList\Domain\ValueObject\TaskDescription;
 use App\TodoList\Domain\ValueObject\TaskState;
 use App\TodoList\Domain\ValueObject\TaskTitle;
+use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="tasks")
+ */
 class Task extends AggregateRoot
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="uuid_binary", unique=true)
+     */
     private UuidInterface $uuid;
 
+    /**
+     * @ORM\Column(type="uuid_binary")
+     */
     private UuidInterface $todoListUuid;
 
+    /**
+     * @ORM\Column(type="task_title")
+     */
     private TaskTitle $title;
 
+    /**
+     * @ORM\Column(type="task_description")
+     */
     private TaskDescription $description;
 
+    /**
+     * @ORM\Column(type="task_state")
+     */
     private TaskState $state;
 
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
     private DateTime $createdAt;
 
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
     private ?DateTime $updatedAt;
 
     /**
