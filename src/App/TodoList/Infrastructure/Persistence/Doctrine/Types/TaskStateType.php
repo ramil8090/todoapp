@@ -43,7 +43,7 @@ final class TaskStateType extends IntegerType
             return $value;
         }
 
-        return TaskState::create($value);
+        return TaskState::create((int) $value);
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool

@@ -11,7 +11,7 @@ use App\TodoList\Domain\Repository\TaskRepositoryInterface;
 use App\TodoList\Domain\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class TaskRepository extends ServiceEntityRepository implements TaskRepositoryInterface
 {
@@ -23,7 +23,7 @@ class TaskRepository extends ServiceEntityRepository implements TaskRepositoryIn
     /**
      * @throws NotFoundException
      */
-    public function get(Uuid $uuid): Task
+    public function get(UuidInterface $uuid): Task
     {
         $task = $this->findOneBy(['uuid' => $uuid]);
 
