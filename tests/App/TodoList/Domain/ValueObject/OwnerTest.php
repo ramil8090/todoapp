@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 
-namespace App\TodoList\Domain\ValueObject;
+namespace Tests\App\TodoList\Domain\ValueObject;
 
 
+use App\TodoList\Domain\ValueObject\Owner;
 use App\User\Domain\ValueObject\Email;
 use PHPUnit\Framework\TestCase;
 

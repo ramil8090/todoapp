@@ -5,14 +5,8 @@ declare(strict_types=1);
 namespace App\User\Domain\Event;
 
 use App\Shared\Domain\Event\DomainEvent;
-use App\Shared\Domain\Exception\DateTimeException;
 use App\Shared\Domain\ValueObject\DateTime;
 use App\User\Domain\ValueObject\Auth\Credentials;
-use App\User\Domain\ValueObject\Auth\HashedPassword;
-use App\User\Domain\ValueObject\Email;
-use Assert\Assertion;
-use Assert\AssertionFailedException;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 final class UserWasCreated implements DomainEvent
@@ -28,36 +22,5 @@ final class UserWasCreated implements DomainEvent
         $this->uuid = $uuid;
         $this->credentials = $credentials;
         $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @throws DateTimeException
-     * @throws AssertionFailedException
-     */
-    public static function deserialize(array $data): self
-    {
-        Assertion::keyExists($data, 'uuid');
-        Assertion::keyExists($data, 'credentials');
-
-        return new self(
-            Uuid::fromString($data['uuid']),
-            new Credentials(
-                Email::fromString($data['credentials']['email']),
-                HashedPassword::fromHash($data['credentials']['hashedPassword'])
-            ),
-            DateTime::fromString($data['created_at'])
-        );
-    }
-
-    public function serialize(): array
-    {
-        return [
-            'uuid' => $this->uuid->toString(),
-            'credentials' => [
-                'email' => $this->credentials->email->toString(),
-                'hashedPassword' => $this->credentials->hashedPassword->toString(),
-            ],
-            'created_at' => $this->createdAt->toString(),
-        ];
     }
 }

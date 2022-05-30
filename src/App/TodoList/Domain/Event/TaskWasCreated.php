@@ -10,18 +10,20 @@ use App\Shared\Domain\Event\DomainEvent;
 use App\Shared\Domain\ValueObject\DateTime;
 use Ramsey\Uuid\UuidInterface;
 
-final class TodoListTitleChanged implements DomainEvent
+class TaskWasCreated implements DomainEvent
 {
     public UuidInterface $uuid;
-    public DateTime $updatedAt;
+    public DateTime $createdAt;
 
     /**
      * @param UuidInterface $uuid
-     * @param DateTime $updatedAt
+     * @param DateTime $createdAt
      */
-    public function __construct(UuidInterface $uuid, DateTime $updatedAt)
+    public function __construct(UuidInterface $uuid, DateTime $createdAt)
     {
         $this->uuid = $uuid;
-        $this->updatedAt = $updatedAt;
+        $this->createdAt = $createdAt;
     }
+
+
 }

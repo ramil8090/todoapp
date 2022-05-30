@@ -14,7 +14,7 @@ class DummyOwnerExistSpecification implements OwnerExistSpecification
 {
     private bool $isExist;
 
-    public function __construct(bool $isExist)
+    public function __construct(bool $isExist = true)
     {
         $this->isExist = $isExist;
     }

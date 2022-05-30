@@ -3,15 +3,16 @@
 declare(strict_types=1);
 
 
-namespace App\TodoList\Domain;
+namespace Tests\App\TodoList\Domain;
 
 
 use App\Shared\Domain\Exception\DateTimeException;
+use App\TodoList\Domain\TodoList;
+use App\TodoList\Domain\ValueObject\Owner;
+use App\TodoList\Domain\ValueObject\TodoListTitle;
 use App\TodoList\Domain\Event\TodoListTitleChanged;
 use App\TodoList\Domain\Event\TodoListWasCreated;
 use App\TodoList\Domain\Exception\OwnerNotExistException;
-use App\TodoList\Domain\ValueObject\Owner;
-use App\TodoList\Domain\ValueObject\TodoListTitle;
 use App\User\Domain\ValueObject\Email;
 use Assert\AssertionFailedException;
 use PHPUnit\Framework\TestCase;
