@@ -24,7 +24,7 @@ class SignInCommand extends Command
 
     protected function configure()
     {
-        $this->setName("app:sing-in-user")
+        $this->setName("app:sign-in-user")
             ->setDescription("Given email and password log in an user.")
             ->addArgument('email', InputArgument::REQUIRED, 'User email')
             ->addArgument('password', InputArgument::REQUIRED, 'User password');
