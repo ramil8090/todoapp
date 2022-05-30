@@ -25,6 +25,6 @@ class DummyTodoListExistSpecification implements TodoListExistSpecification
             throw new TodoListNotExistException();
         }
 
-        return false;
+        return true;
     }
 }
