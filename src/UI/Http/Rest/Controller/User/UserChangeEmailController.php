@@ -12,6 +12,7 @@ use App\User\Domain\Exception\ForbiddenException;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
 use Ramsey\Uuid\Nonstandard\Uuid;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,6 +68,8 @@ class UserChangeEmailController extends CommandController
      * )
      *
      * @OA\Tag(name="User")
+     *
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @throws AssertionFailedException
      */

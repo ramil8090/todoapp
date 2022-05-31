@@ -41,12 +41,12 @@ final class User extends AggregateRoot
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private ?DateTimeImmutable $createdAt;
+    private ?DateTime $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private ?DateTimeImmutable $updatedAt;
+    private ?DateTime $updatedAt = null;
 
     /**
      * @throws DateTimeException
@@ -162,6 +162,19 @@ final class User extends AggregateRoot
     public function updatedAt(): ?DateTime
     {
         return $this->updatedAt;
+    }
+
+    public function serialize(): array
+    {
+        return [
+            'uuid' => $this->uuid(),
+            'credentials' => [
+                'email' => $this->email(),
+                'hashedPassword' => $this->hashedPassword(),
+            ],
+            'created_at' => $this->createdAt()->toString(),
+            'updated_at' => $this->updatedAt()?->toString(),
+        ];
     }
 
 }
