@@ -7,17 +7,19 @@ namespace UI\Http\Rest\Controller\TodoList;
 
 
 use App\Shared\Application\Command\CommandBusInterface;
+use App\TodoList\Application\Command\ChangeTodoListTitle\ChangeTodoListTitleCommand;
 use App\TodoList\Application\Command\CreateTodoList\CreateTodoListCommand;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Controller\CommandController;
 use UI\Http\Rest\Response\OpenApi;
 use UI\Http\Session;
 
-class CreateTodoListController extends CommandController
+class ChangeTodoListTitleController extends CommandController
 {
     private Session $session;
 
@@ -33,8 +35,8 @@ class CreateTodoListController extends CommandController
 
     /**
      * @Route(
-     *     "/todolist",
-     *     name="todolist_create",
+     *     "/todolist/{uuid}/title",
+     *     name="todolist_change_title",
      *     methods={"POST"}
      * )
      *
@@ -42,9 +44,8 @@ class CreateTodoListController extends CommandController
      *
      * @throws AssertionFailedException
      */
-    public function __invoke(Request $request): OpenApi
+    public function __invoke(string $uuid, Request $request): JsonResponse
     {
-        $uuid = $request->get('uuid');
         $title = $request->get('title');
         $ownerEmail = $this->session->get()->getUsername();
 
@@ -52,10 +53,10 @@ class CreateTodoListController extends CommandController
         Assertion::notNull($title);
         Assertion::notNull($ownerEmail);
 
-        $command = new CreateTodoListCommand($uuid, $title, $ownerEmail);
+        $command = new ChangeTodoListTitleCommand($uuid, $title, $ownerEmail);
 
         $this->handle($command);
 
-        return OpenApi::created("/todolist/$uuid");
+        return new JsonResponse();
     }
 }
